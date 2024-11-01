@@ -95,25 +95,25 @@ export const getDataByFiltered = async(req, res) => {
 };
 
 
-export const getAllFilterData = async(req, res) => {
+export const getPaymentType = async(req, res) => {
   try{
       const response = await axios.get('https://data.cityofnewyork.us/resource/gkne-dk5s.json');
 
-      const rangeTotalAmount = [20, 40, 80, 100];
-      const rangeTripDistance = [1, 3, 5, 8 , 10];
       const paymentType = [...new Set(response.data.map(item => item.payment_type))];
-      const dataAll = {
-          range_total_amount: rangeTotalAmount,
-          range_trip_distance: rangeTripDistance,
-          all_payment_type: paymentType
-      }
+      // console.log(paymentType);
 
-      if(dataAll != null){
+      if(paymentType && paymentType.length > 0){
           res.status(200).json({
               status: "success",
-              message: "Data tarif ditemukan",
-              data: dataAll
+              message: "Data jenis pembayaran ditemukan",
+              data: paymentType
           });
+      }else if(paymentType && paymentType.length === 0){
+          res.status(200).json({
+            status: "success",
+            message: "Data jenis pembayaran tidak ditemukan",
+            data: []
+        });
       }else{
           res.status(404).json({
               status: "error",
